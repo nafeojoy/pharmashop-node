@@ -1,26 +1,17 @@
+import { client } from "../../server.conf";
+
 export default (app, router, logger) => {
 
-    router.route("/test-api")
+    router.route("/get-medicines")
         .get((req, res) => {
-            let medicines = [
-                {
-                    id: Math.random(),
-                    text: 'MilkNode1',
-                },
-                {
-                    id: Math.random(),
-                    text: 'Eggs',
-                },
-                {
-                    id: Math.random(),
-                    text: 'Bread',
-                },
-                {
-                    id: Math.random(),
-                    text: 'Juice',
+            client.query('SELECT * FROM medicine', (err, response) => {
+                if (!err) {
+                    res.json(response.rows)
+                } else {
+                    res.send(err)
                 }
-            ]
-            res.json(medicines);
+                client.end();
+            })
         })
 
 }

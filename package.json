@@ -83,7 +83,9 @@
     "xlsx": "0.12.13",
     "xml-js": "^1.6.11",
     "xmlhttprequest": "^1.8.0",
-    "zone.js": "0.7.7"
+    "zone.js": "0.7.7",
+    "consolidate": "*",
+    "pg": "*"
   },
   "devDependencies": {
     "autoprefixer": "^9.7.4",

@@ -8,7 +8,6 @@ import {
 // Set up appropriate environment variables if necessary
 validateEnvVariables();
 
-import config from './config/config.json';
 
 // # Modules
 
@@ -39,12 +38,32 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import compression from 'compression';
 
+
+import path from 'path';
+import consolidate from 'consolidate';
+import dustjsHelpers from 'dustjs-helpers';
+import { Client, Pool } from 'pg';
+
 // # Configuration
 
 // Load Socket.io server functionality
 import base from './sockets/base';
 
 base(io);
+
+//DB Connection string
+var connectionString = "postgres://nafeo:nafeo@localhost/pharmashop";
+
+// Connect to POSTGRES --------------------------
+const client = new Client({
+  connectionString: connectionString
+})
+
+client.connect();
+
+
+
+//-------------------------------------------------
 
 // Set the port for this app
 let port = process.env.PORT || 3000;
@@ -64,19 +83,17 @@ if (process.env.NODE_ENV === 'development' ||
 app.use(cookieParser());
 app.use(device.capture());
 
-
 // ## Get all data/stuff of the body (POST) parameters
 
 // Parse application/json
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 // Parse application/vnd.api+json as json
 app.use(bodyParser.json({
   type: 'application/vnd.api+json'
 }));
-// Parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+
+
 
 // Override with the X-HTTP-Method-Override header in the request. Simulate DELETE/PUT
 app.use(methodOverride('X-HTTP-Method-Override'));
@@ -87,12 +104,9 @@ app.use(compression({
 }));
 
 function shouldCompress(req, res) {
-
-
   if (req.headers['x-no-compression']) {
     return false
   }
-
   // fallback to standard filter function
   return compression.filter(req, res);
 }
@@ -139,5 +153,6 @@ console.log(`Wizardry is afoot on port ${port}`);
 
 // Expose app
 export {
-  app
+  app,
+  client
 };
