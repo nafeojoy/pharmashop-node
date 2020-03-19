@@ -1,4 +1,5 @@
 // # Node Env Variables
+import { PostGreConnectionString } from "./config/config.json";
 
 // Load Node environment variable configuration file
 import {
@@ -51,22 +52,14 @@ import base from './sockets/base';
 
 base(io);
 
-//DB Connection string
-var connectionString = "postgres://nafeo:nafeo@localhost/pharmashop";
 
-// Connect to POSTGRES --------------------------
-const client = new Client({
-  connectionString: connectionString
-})
-
-client.connect();
 
 
 
 //-------------------------------------------------
 
 // Set the port for this app
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 4000;
 
 // Import PassportJS configuration
 //import passportConf from './config/passport.conf.js';
@@ -87,11 +80,10 @@ app.use(device.capture());
 
 // Parse application/json
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
 // Parse application/vnd.api+json as json
-app.use(bodyParser.json({
-  type: 'application/vnd.api+json'
-}));
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+// Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
@@ -122,6 +114,16 @@ app.use(session({
   saveUninitialized: true
 }));
 
+
+//DB Connection string
+var connectionString = PostGreConnectionString;
+
+// Connect to POSTGRES --------------------------
+const client = new Client({
+  connectionString: connectionString
+})
+
+client.connect();
 //app.use(passport.initialize());
 
 // Persistent login sessions

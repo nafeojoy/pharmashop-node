@@ -1,3 +1,4 @@
 {
-    "ENV": "development"
+    "ENV": "development",
+    "PostGreConnectionString": "postgres://nafeo:nafio@localhost:5433/pharmashop"
 }
