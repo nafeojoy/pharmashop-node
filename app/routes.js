@@ -9,6 +9,9 @@
 //Authentication Api
 import authRoutes from './routes/_authentication.router.js';
 import MedicineRoutes from './routes/medicine.router.js'
+import CustomerRoutes from './routes/customer.router.js'
+import OrderRoutes from './routes/order.router.js'
+import ShopRoutes from './routes/shop.router.js'
 import cors from 'cors';
 import useragent from 'express-useragent';
 import jwt from 'jsonwebtoken';
@@ -19,17 +22,13 @@ import config from '../config/config.json';
 export default (app, router) => {
 
   // Redis Cache Server
-  
   app.use(useragent.express());
-
-
+  
   // ### Express Middlware to use for all requests
   router.use((req, res, next) => {
-
     // Make sure we go to the next routes and don't stop here...
     next();
   });
-
 
 
   // Define a middleware function to be used for all secured routes
@@ -78,7 +77,6 @@ export default (app, router) => {
   // For mobile app api
   app.use(function (req, res, next) {
 
-
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -99,13 +97,16 @@ export default (app, router) => {
 
   // Pass in our Express app and Router
   //authRoutes(app, router, passport, auth);
- 
+
   MedicineRoutes(app, router, logger);
- 
+  CustomerRoutes(app, router, logger);
+  OrderRoutes(app, router, logger);
+  ShopRoutes(app, router, logger);
+
   // dynamiPagesRoutes(app, router, auth);
   // All of our routes will be prefixed with /api
 
-  
+
   app.use('/api', router);
- 
+
 };
