@@ -6,3 +6,4 @@
 6. **gulp serve** for development Run
 7. **gulp serve:live** for production Run
 8. PORT: 4000 (Can change)
+9. PostgreSQL should be running
